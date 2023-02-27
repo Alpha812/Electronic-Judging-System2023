@@ -20,7 +20,14 @@ class ClientError(Exception):
 
 
 def read_config():
-    return {"port": 5555, "debug": True}
+    try:
+        with open("config.json") as fl:
+            data = load(fl)
+        port: int = data["port"]
+        debug: bool = data["debug"]
+    except FileNotFoundError:
+        with open("config.json", "w") as fl:
+            dump({"port": 5555, "debug": True}, fl)
 
 
 def validate_driver_id(idx):
